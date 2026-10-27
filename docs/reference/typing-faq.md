@@ -351,16 +351,18 @@ issue](https://github.com/astral-sh/ty/issues/1578).
 
 ## Does ty have a strict mode?
 
-ty doesn't currently have a flag called `--strict`, but it is reasonably strict by default, and
-there are some easy ways to enable stricter type-checking on your code. See
-[Stricter checking with ty](../coming-from-mypy-or-pyright.md#stricter-checking-with-ty) for more
-details.
+Yes. Run `ty check --strict`, or set `preset = "strict"` under `[tool.ty]` in `pyproject.toml`
+to use strict mode in both the CLI and your editor. The [`strict` preset](configuration.md#preset)
+reports unannotated parameters, omitted generic type arguments, missing `@override` decorators,
+and unused ignore comments as errors. You can still configure each rule separately.
 
 ## Why doesn't ty warn about missing type annotations?
 
-ty does not report an error for unannotated function parameters, return types, or variables. It infers
-types where it can and uses [`Unknown`](#what-is-the-unknown-type-and-when-does-it-appear) when it
-cannot, while still providing useful diagnostics.
+By default, ty infers types where it can and uses
+[`Unknown`](#what-is-the-unknown-type-and-when-does-it-appear) when it cannot.
+Enable [`unannotated-parameter`](rules.md#unannotated-parameter) to require annotations for function
+parameters other than method receivers. Strict mode enables this rule. Return types and variables
+can still be left unannotated.
 
 If you are looking for the equivalent of mypy's
 [`disallow_untyped_defs`](https://mypy.readthedocs.io/en/stable/config_file.html#confval-disallow_untyped_defs)

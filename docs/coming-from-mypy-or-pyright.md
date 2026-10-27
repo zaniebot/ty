@@ -38,9 +38,20 @@ they are either very opinionated or have many false positives.
 
 ### Recommended configuration
 
-To enable all ty rules at once with the `error` severity, you can simply use `--error=all`, but we
-wouldn't recommend it. Instead, you can currently approximate something similar to the `--strict`
-mode of other type checkers with the following configuration:
+Run `ty check --strict` to try the [strict preset](reference/configuration.md#preset). Set it in
+`pyproject.toml` to use it in both the CLI and your editor.
+
+```toml
+[tool.ty]
+preset = "strict"
+```
+
+Strict mode requires annotations on function parameters other than method receivers, reports
+omitted generic type arguments, checks for missing `@override` decorators, and treats unused ignore
+comments as errors. You can adjust individual rules under `[tool.ty.rules]`.
+
+You can also select rules individually. This example checks for decorators that obscure a
+function's type and for unsound return statements.
 
 ```toml
 [tool.ty.rules]
@@ -265,7 +276,7 @@ emitted, or is folded into a broader category that already appears for another t
 | None yet (tracked in [#4381][ty-4381])                                                                                       | [`no-untyped-call`][mypy-no-untyped-call]                                                                                                                  |                                                                                                                                                                                        |
 | [Ruff `F505`][ruff-f505]<br>[Ruff `F507`][ruff-f507] (missing names or wrong argument counts only)                           | [`str-format`][mypy-str-format] (partial coverage)                                                                                                         |                                                                                                                                                                                        |
 | [Ruff `F522`][ruff-f522]<br>[Ruff `F523`][ruff-f523]<br>[Ruff `F524`][ruff-f524] (missing or extra arguments only)           | [`str-format`][mypy-str-format] (partial coverage)                                                                                                         |                                                                                                                                                                                        |
-| [Ruff `ANN` rules][ruff-ann]                                                                                                 | [`no-untyped-def`][mypy-no-untyped-def]                                                                                                                    | [`reportMissingParameterType`][reportmissingparametertype]<br>[`reportUnknownParameterType`][reportunknownparametertype]                                                               |
+| [`unannotated-parameter`](reference/rules.md#unannotated-parameter)<br>[Ruff `ANN` rules][ruff-ann]                          | [`no-untyped-def`][mypy-no-untyped-def]                                                                                                                    | [`reportMissingParameterType`][reportmissingparametertype]<br>[`reportUnknownParameterType`][reportunknownparametertype]                                                               |
 
 The full list of ty rules — including those without a direct equivalent above — is in
 [Rules](reference/rules.md). Contributions to extend this mapping are welcome via pull request to the
